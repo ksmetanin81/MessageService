@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: TransportService
+  main:
+    banner-mode: 'off'
+
+server:
+  port: 8803
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  packages-to-scan: com.colvir
+
+management:
+  endpoints.web.exposure.include: 'prometheus, metrics, info, health, env'
+  endpoint:
+    metrics:
+      access: read_only
+    prometheus:
+      access: read_only
+  prometheus:
+    metrics:
+      export:
+        enabled: true

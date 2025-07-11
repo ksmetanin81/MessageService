@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db_messaging:
+    image: postgres:17.4-alpine
+    container_name: postgres_messaging
+    restart: always
+    environment:
+      - POSTGRES_DB=messagingService
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./messagingService/postgres-volume:/var/lib/postgresql/data
+
+  db_prepare:
+    image: postgres:17.4-alpine
+    container_name: postgres_prepare
+    restart: always
+    environment:
+      - POSTGRES_DB=prepareService
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./prepareService/postgres-volume:/var/lib/postgresql/data
+
+  db_transport:
+    image: postgres:17.4-alpine
+    container_name: postgres_transport
+    restart: always
+    environment:
+      - POSTGRES_DB=transportService
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - '5434:5432'
+    volumes:
+      - ./transportService/postgres-volume:/var/lib/postgresql/data
+
+#volumes:
+#  postgres-volume:

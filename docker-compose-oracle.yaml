@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: gvenzl/oracle-free:latest # oracle/database:19.3.0-ee
+    container_name: oracle-db
+    environment:
+      - ORACLE_PWD=pass
+      - ORACLE_SID=ORCL
+      - ORACLE_CHARACTERSET=AL32UTF8
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    restart: always

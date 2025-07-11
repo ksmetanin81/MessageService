@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="schema2" author="Konstantin Smetanin">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="templates"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="templates">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="templates_pk"/>
+            </column>
+             <column name="message_code" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="processing_code" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="context_query" type="varchar(4000)"/>
+            <column name="template" type="varchar(4000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
