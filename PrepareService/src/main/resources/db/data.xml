@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="data" author="Konstantin Smetanin">
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0"><![CDATA[
+                select count(*)
+                from templates
+                where 1 = 1
+                ]]></sqlCheck>
+        </preConditions>
+
+        <insert tableName="templates">
+            <column name="message_code" value="GETCRDINFO"/>
+            <column name="processing_code" value="SMARTVISTA"/>
+            <column name="context_query" value="select
+xmlelement(&quot;CbsData&quot;,
+  xmlelement(&quot;Crd&quot;,
+    xmlforest(c.CARDIDN, c.CARDCODE, c.EXPIREDT, c.EMBOSSEDNAME)),
+  xmlelement(&quot;Acc&quot;,
+    xmlforest(a.CODE, e.ALIAS))
+    ).getClobVal()
+ from N_CRD c, NV_CRDACC ca, G_ACCBLN a, N_PRC_ENTITIES e
+where c.DEP_ID = :DEP_ID and c.ID = :ID
+  and ca.DEP_ID = c.DEP_ID and ca.ID = c.ID and ca.ISDEFAULT = 1
+  and a.DEP_ID = ca.ACC_DEP_ID and a.ID = ca.ACC_ID
+  and e.ENT_DEP_ID = a.DEP_ID and e.ENT_ID = a.ID and e.CBS_ENT = 'ACC'"/>
+
+            <column name="template" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;xsl:stylesheet version=&quot;2.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;&gt;
+  &lt;xsl:output method=&quot;text&quot; encoding=&quot;utf-8&quot; indent=&quot;no&quot; omit-xml-declaration=&quot;no&quot;/&gt;
+  &lt;xsl:template match=&quot;/&quot;&gt;
+  {
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;method&quot;: &quot;bo.card.get&quot;,
+  &quot;id&quot;: &lt;xsl:value-of select=&quot;/MsgContext/MsgInfo/MsgId&quot;/&gt;,
+  &quot;params&quot;: {
+  &quot;card&quot;: {
+  &quot;pan4Last&quot;: &quot;&lt;xsl:choose&gt;
+    &lt;xsl:when test=&quot;/MsgContext/CbsData != ''&quot;&gt;&lt;xsl:value-of select=&quot;substring(/MsgContext/CbsData/Crd/CARDCODE, 13, 4)&quot;/&gt;&lt;/xsl:when&gt;
+    &lt;xsl:otherwise&gt;&lt;xsl:value-of select=&quot;/MsgContext/MsgInfo/PARAMS/PARAM[@NAME='PAN4LAST']&quot;/&gt;&lt;/xsl:otherwise&gt;
+  &lt;/xsl:choose&gt;',
+  'account': '&lt;xsl:choose&gt;
+    &lt;xsl:when test=&quot;/MsgContext/CbsData != ''&quot;&gt;&lt;xsl:value-of select=&quot;/MsgContext/CbsData/Acc/ALIAS&quot;/&gt;&lt;/xsl:when&gt;
+    &lt;xsl:otherwise>&lt;xsl:value-of select=&quot;/MsgContext/MsgInfo/PARAMS/PARAM[@NAME='ACCOUNT']&quot;/&gt;&lt;/xsl:otherwise&gt;
+  &lt;/xsl:choose&gt;'
+  }
+  }
+  }
+  &lt;/xsl:template&gt;
+  &lt;/xsl:stylesheet&gt;"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

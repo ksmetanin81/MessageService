@@ -21,9 +21,15 @@ public class TemplateController {
 
     private final TemplateService templateService;
 
-    @PutMapping("/prepare")
+    @PostMapping("/prepare")
     public MessageDto prepare(@RequestBody @Valid MessageDto messageDto) {
-        return templateService.prepare(messageDto);
+        try {
+            return templateService.prepare(messageDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            messageDto.setError(e.toString());
+            return messageDto;
+        }
     }
 
     @GetMapping

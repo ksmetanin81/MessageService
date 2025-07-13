@@ -19,6 +19,13 @@ spring:
   liquibase:
     change-log: 'classpath:db/changeLog.xml'
 
+cbs:
+  datasource:
+    url: jdbc:oracle:thin:@1.1.1.58:1521:ALOQADEV
+    username: colvir
+    password: colvir
+    driver-class-name: oracle.jdbc.OracleDriver
+
 server:
   port: 8802
 
