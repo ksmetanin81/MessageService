@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -18,12 +18,13 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate sendDate;
+    private LocalDateTime sendDate;
     private String messageCode;
     private String processingCode;
     private String parameters;
+    private String externalId;
     private String body;
-    private LocalDate answerDate;
+    private LocalDateTime answerDate;
     private String answer;
     private String error;
 }

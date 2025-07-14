@@ -2,18 +2,19 @@ package com.colvir.dto;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class MessageDto {
 
     private Long id;
-    private LocalDate sendDate;
+    private LocalDateTime sendDate;
     private String messageCode;
     private String processingCode;
     private String parameters;
+    private String externalId;
     private String body;
-    private LocalDate answerDate;
+    private LocalDateTime answerDate;
     private String answer;
     private String error;
 

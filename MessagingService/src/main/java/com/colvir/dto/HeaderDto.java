@@ -11,4 +11,5 @@ public class HeaderDto {
     @NotEmpty
     private String processingCode;
     private String parameters;
+    private String externalId;
 }

@@ -5,7 +5,7 @@ import com.colvir.dto.HeaderDto;
 import com.colvir.model.Message;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class MessageMapper {
@@ -22,6 +22,7 @@ public class MessageMapper {
         messageDto.setMessageCode(message.getMessageCode());
         messageDto.setProcessingCode(message.getProcessingCode());
         messageDto.setParameters(message.getParameters());
+        messageDto.setExternalId(message.getExternalId());
         messageDto.setBody(message.getBody());
         messageDto.setAnswerDate(message.getAnswerDate());
         messageDto.setAnswer(message.getAnswer());
@@ -42,6 +43,7 @@ public class MessageMapper {
         message.setMessageCode(messageDto.getMessageCode());
         message.setProcessingCode(messageDto.getProcessingCode());
         message.setParameters(messageDto.getParameters());
+        message.setExternalId(messageDto.getExternalId());
         message.setBody(messageDto.getBody());
         message.setAnswerDate(messageDto.getAnswerDate());
         message.setAnswer(messageDto.getAnswer());
@@ -57,10 +59,11 @@ public class MessageMapper {
 
         Message message = new Message();
 
-        message.setSendDate(LocalDate.now());
+        message.setSendDate(LocalDateTime.now());
         message.setMessageCode(headerDto.getMessageCode());
         message.setProcessingCode(headerDto.getProcessingCode());
         message.setParameters(headerDto.getParameters());
+        message.setExternalId(headerDto.getExternalId());
 
         return message;
     }

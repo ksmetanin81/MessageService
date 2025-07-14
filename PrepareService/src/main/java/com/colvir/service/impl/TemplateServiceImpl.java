@@ -8,7 +8,6 @@ import com.colvir.repository.CbsRepository;
 import com.colvir.repository.TemplateRepository;
 import com.colvir.service.TemplateService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.jdbc.TooManyRowsAffectedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -27,7 +26,11 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +42,7 @@ public class TemplateServiceImpl implements TemplateService {
     private final TemplateMapper templateMapper;
 
     private Map<String, String> toMap(String params) {
-        return (Map<String, String>) Arrays.stream(params.split(","))
+        return Arrays.stream(params.split(","))
                 .map(pair -> pair.split("=>"))
                 .filter(pair -> pair.length == 2)
                 .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1]));
@@ -48,12 +51,14 @@ public class TemplateServiceImpl implements TemplateService {
     private String prepareQuery(String query, Map<String, String> params) {
         String prepareQuery = query;
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            prepareQuery = prepareQuery.replaceAll(":"+entry.getKey()+" ", entry.getValue()+" ");
+            prepareQuery = prepareQuery.replaceAll(":" + entry.getKey() + "\\s", entry.getValue() + " ");
         }
         prepareQuery = prepareQuery.replaceAll(":.+?\\s", "'' ");
+
         System.out.println(prepareQuery);
         return prepareQuery;
     }
+
     private Document createContext(MessageDto messageDto, String cbsData) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -88,16 +93,17 @@ public class TemplateServiceImpl implements TemplateService {
         return document;
     }
 
-    public String xsltTranslate(Document context, String template) throws TransformerException {
+    private String xsltTranslate(Document context, String template) throws TransformerException {
 
-         Source contextSource = new DOMSource(context);
-         Source xsltSource = new StreamSource(new StringReader(template));
+        Source contextSource = new DOMSource(context);
+        Source xsltSource = new StreamSource(new StringReader(template));
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer(xsltSource);
 
         StringWriter writer = new StringWriter();
         transformer.transform(contextSource, new StreamResult(writer));
+
         System.out.println(writer);
         return writer.toString();
     }

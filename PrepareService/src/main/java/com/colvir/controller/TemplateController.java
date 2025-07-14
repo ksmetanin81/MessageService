@@ -9,7 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,14 +26,8 @@ public class TemplateController {
     private final TemplateService templateService;
 
     @PostMapping("/prepare")
-    public MessageDto prepare(@RequestBody @Valid MessageDto messageDto) {
-        try {
-            return templateService.prepare(messageDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            messageDto.setError(e.toString());
-            return messageDto;
-        }
+    public MessageDto prepare(@RequestBody @Valid MessageDto messageDto) throws ParserConfigurationException, IOException, TransformerException, SAXException {
+        return templateService.prepare(messageDto);
     }
 
     @GetMapping

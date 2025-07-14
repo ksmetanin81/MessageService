@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="data_channels" author="Konstantin Smetanin">
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0"><![CDATA[
+                select count(*)
+                from channels
+                where 1 = 1
+                ]]></sqlCheck>
+        </preConditions>
+
+        <insert tableName="channels">
+            <column name="processing_code" value="SMARTVISTA"/>
+            <column name="host" value="http://1.1.4.61:8080/PC/UzCard/Release"/>
+            <column name="login" value="client"/>
+            <column name="pass" value="pass"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="data_messages" author="Konstantin Smetanin">
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0"><![CDATA[
+                select count(*)
+                from message_codes
+                where 1 = 1
+                ]]></sqlCheck>
+        </preConditions>
+
+        <insert tableName="message_codes">
+            <column name="message_code" value="GETCRDINFO"/>
+            <column name="channel_id" value="1"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

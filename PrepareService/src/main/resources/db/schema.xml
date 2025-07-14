@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="schema2" author="Konstantin Smetanin">
+    <changeSet id="schema_templates" author="Konstantin Smetanin">
 
         <preConditions onFail="MARK_RAN">
             <not>

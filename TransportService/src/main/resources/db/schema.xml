@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="schema_channels" author="Konstantin Smetanin">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="channels"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="channels">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="channels_pk"/>
+            </column>
+            <column name="processing_code" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="host" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="login" type="varchar(30)"/>
+            <column name="pass" type="varchar(30)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="schema_message_codes" author="Konstantin Smetanin">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="message_codes"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="message_codes">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="message_codes_pk"/>
+            </column>
+            <column name="message_code" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="messages_channels_fk" references="channels(id)" deleteCascade="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

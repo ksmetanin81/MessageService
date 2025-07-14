@@ -4,6 +4,26 @@ spring:
   main:
     banner-mode: 'off'
 
+  datasource:
+    url: jdbc:postgresql://localhost:5434/transportService
+    username: admin
+    password: pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+  liquibase:
+    change-log: 'classpath:db/changeLog.xml'
+
+  activemq:
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+
 server:
   port: 8803
 

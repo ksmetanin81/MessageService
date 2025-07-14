@@ -3,6 +3,7 @@ package com.colvir.controller;
 import com.colvir.dto.HeaderDto;
 import com.colvir.dto.MessageDto;
 import com.colvir.service.MessagingService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class MessagingController {
 
     @PostMapping("/send")
     @ResponseStatus(HttpStatus.CREATED)
-    public void send(@RequestBody @Valid HeaderDto headerDto) {
+    public void send(@RequestBody @Valid HeaderDto headerDto) throws JsonProcessingException {
         messagingService.send(headerDto);
     }
 
@@ -38,7 +39,12 @@ public class MessagingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MessageDto> getTemplateById(@PathVariable Long id) {
+    public ResponseEntity<MessageDto> getMessageById(@PathVariable Long id) {
         return messagingService.getMessageById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/byExternalId/{extId}")
+    public List<MessageDto> getMessagesByExternalId(@PathVariable String extId) {
+        return messagingService.getMessagesByExternalId(extId);
     }
 }

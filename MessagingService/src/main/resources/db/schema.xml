@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="schema" author="Konstantin Smetanin">
+    <changeSet id="schema_messages" author="Konstantin Smetanin">
 
         <preConditions onFail="MARK_RAN">
             <not>
@@ -16,7 +16,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="messages_pk"/>
             </column>
-            <column name="send_date" type="date">
+            <column name="send_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="message_code" type="varchar(30)">
@@ -26,8 +26,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="parameters" type="varchar(500)"/>
+            <column name="external_id" type="varchar(30)"/>
             <column name="body" type="varchar(4000)"/>
-            <column name="answer_date" type="date"/>
+            <column name="answer_date" type="timestamp"/>
             <column name="answer" type="varchar(4000)"/>
             <column name="error" type="varchar(500)"/>
         </createTable>
