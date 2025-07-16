@@ -24,6 +24,23 @@ spring:
     user: admin
     password: admin
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8500/realms/message-service/protocol/openid-connect/certs
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8500/realms/message-service
+        registration:
+          gateway-client:
+            provider: keycloak
+            client-id: service-client
+            client-secret: n0EdE1JjWbCBjz8JfRZI0qKbWZWS7piW
+            authorization-grant-type: authorization_code
+            scope: openid
+
 cbs:
   datasource:
     url: jdbc:oracle:thin:@1.1.1.58:1521:ALOQADEV

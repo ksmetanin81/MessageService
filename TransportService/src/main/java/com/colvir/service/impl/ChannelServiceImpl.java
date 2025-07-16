@@ -28,7 +28,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     private final ChannelRepository channelRepository;
     private final ChannelMapper channelMapper;
-    
+
     @Override
     @Transactional(readOnly = true)
     public MessageDto send(MessageDto messageDto) throws IOException, InterruptedException {

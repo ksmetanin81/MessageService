@@ -31,7 +31,7 @@ public class MessageListener {
         try {
             messageProducer.send(QUEUE_ANSWER, channelService.send(messageDto));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error sending by the channel service", e);
             messageDto.setError(e.toString());
             messageProducer.send(QUEUE_ERROR, messageDto);
         }

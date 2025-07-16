@@ -1,0 +1,67 @@
+spring:
+  main:
+    banner-mode: 'off'
+  application:
+    name: ApiGateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: messaging_route
+              uri: lb://MessagingService
+              predicates:
+                - Path=/message/**
+              filters:
+                - StripPrefix=1
+                - TokenRelay=
+            - id: prepare_route
+              uri: lb://PrepareService
+              predicates:
+                - Path=/template/**
+              filters:
+                - StripPrefix=1
+                - TokenRelay=
+            - id: transport_route
+              uri: lb://TransportService
+              predicates:
+                - Path=/channel/**
+              filters:
+                - StripPrefix=1
+                - TokenRelay=
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8500/realms/message-service/protocol/openid-connect/certs
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8500/realms/message-service
+        registration:
+          gateway-client:
+            provider: keycloak
+            client-id: service-client
+            client-secret: n0EdE1JjWbCBjz8JfRZI0qKbWZWS7piW
+            authorization-grant-type: authorization_code
+            scope: openid
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 9091
+
+management:
+  endpoints.web.exposure.include: 'gateway, prometheus, metrics, info, health, env'
+  endpoint:
+    metrics:
+      access: read_only
+    prometheus:
+      access: read_only
+  prometheus:
+    metrics:
+      export:
+        enabled: true

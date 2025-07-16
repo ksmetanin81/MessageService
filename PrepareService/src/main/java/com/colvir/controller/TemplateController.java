@@ -20,7 +20,6 @@ import java.util.NoSuchElementException;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/templates")
 public class TemplateController {
 
     private final TemplateService templateService;
@@ -30,17 +29,17 @@ public class TemplateController {
         return templateService.prepare(messageDto);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public List<TemplateDto> getTemplates() {
         return templateService.getTemplates();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<TemplateDto> getTemplateById(@PathVariable Long id) {
         return templateService.getTemplateById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody @Valid TemplateDto templateDto) {
         if (templateDto.getId() != null) {
@@ -49,14 +48,14 @@ public class TemplateController {
         templateService.save(templateDto);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public void update(@RequestBody @Valid TemplateDto templateDto) {
         templateService.getTemplateById(templateDto.getId()).ifPresentOrElse(it -> templateService.save(templateDto), () -> {
             throw new NoSuchElementException("Template not found");
         });
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         return templateService.delete(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static com.colvir.config.JmsConfig.*;
+import static com.colvir.config.JmsConfig.QUEUE_ERROR;
+import static com.colvir.config.JmsConfig.QUEUE_NEW;
+import static com.colvir.config.JmsConfig.QUEUE_PREPARE;
 
 @Slf4j
 @Component
@@ -30,7 +32,7 @@ public class MessageListener {
         try {
             messageProducer.send(QUEUE_PREPARE, templateService.prepare(messageDto));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error prepare by the template service", e);
             messageDto.setError(e.toString());
             messageProducer.send(QUEUE_ERROR, messageDto);
         }

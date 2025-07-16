@@ -17,7 +17,6 @@ import java.util.NoSuchElementException;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/channels")
 public class ChannelController {
 
     private final ChannelService channelService;
@@ -27,17 +26,17 @@ public class ChannelController {
         return channelService.send(messageDto);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public List<ChannelDto> getChannels() {
         return channelService.getChannels();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<ChannelDto> getChannelById(@PathVariable Long id) {
         return channelService.getChannelById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody @Valid ChannelDto channelDto) {
         if (channelDto.getId() != null) {
@@ -46,14 +45,14 @@ public class ChannelController {
         channelService.save(channelDto);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public void update(@RequestBody @Valid ChannelDto channelDto) {
         channelService.getChannelById(channelDto.getId()).ifPresentOrElse(it -> channelService.save(channelDto), () -> {
             throw new NoSuchElementException("Channel not found");
         });
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         return channelService.delete(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }

@@ -16,7 +16,6 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/messages")
 public class MessagingController {
 
     private final MessagingService messagingService;
@@ -33,17 +32,17 @@ public class MessagingController {
         return messagingService.sendSync(headerDto);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public List<MessageDto> getMessages() {
         return messagingService.getMessages();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<MessageDto> getMessageById(@PathVariable Long id) {
         return messagingService.getMessageById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/byExternalId/{extId}")
+    @GetMapping("/getByExtId/{extId}")
     public List<MessageDto> getMessagesByExternalId(@PathVariable String extId) {
         return messagingService.getMessagesByExternalId(extId);
     }

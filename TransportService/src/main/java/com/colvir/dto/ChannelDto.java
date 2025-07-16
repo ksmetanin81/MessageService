@@ -11,6 +11,4 @@ public class ChannelDto {
     private String host;
     private String login;
     private String pass;
-
-    // private List<String> messageCodes;
 }

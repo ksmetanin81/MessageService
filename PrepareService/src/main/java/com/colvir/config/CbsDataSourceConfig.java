@@ -20,7 +20,7 @@ public class CbsDataSourceConfig {
     @Value("${cbs.datasource.driver-class-name}")
     private String driver;
 
-    public DataSource cbsDataSource() {
+    private DataSource cbsDataSource() {
         return DataSourceBuilder
                 .create()
                 .url(url)

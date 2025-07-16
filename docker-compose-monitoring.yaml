@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      colvir-backend:
+        aliases:
+          - prometheus.backend
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    networks:
+      colvir-backend:
+        aliases:
+          - grafana.backend
+
+networks:
+  colvir-backend:
